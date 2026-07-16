@@ -11,6 +11,8 @@ const languageLabel = document.querySelector('#language-label');
 const colourInput = document.querySelector('#custom-colour');
 const opacityInput = document.querySelector('#background-opacity');
 const opacityValue = document.querySelector('#opacity-value');
+const hero = document.querySelector('.compact-hero');
+const heroFish = document.querySelector('.hero-fish');
 
 const messages = {
   zh: {
@@ -43,9 +45,30 @@ const messages = {
 let species = [];
 let language = 'zh';
 let currentTheme = 'paper';
+const layoutDefaults = {
+  shellWidth: 1540, shellTop: 26, heroHeight: 164, heroGap: 14,
+  brandX: 0, brandY: 0, brandScale: 100, sideX: 0, sideY: 0,
+  fishX: 0, fishY: 0, fishScale: 100, fishOpacity: 70,
+  controlsPadding: 16, tableHeight: 70,
+};
+const layoutLimits = {
+  shellWidth: [900, 1900], shellTop: [0, 120], heroHeight: [90, 520], heroGap: [0, 80],
+  brandX: [-500, 500], brandY: [-240, 240], brandScale: [55, 160], sideX: [-500, 500], sideY: [-240, 240],
+  fishX: [-420, 420], fishY: [-240, 240], fishScale: [40, 170], fishOpacity: [15, 100],
+  controlsPadding: [0, 40], tableHeight: [35, 90],
+};
+let layout = { ...layoutDefaults };
 
 function readPreferences() {
   try { return JSON.parse(localStorage.getItem('rhinogobius-ui-preferences')) || {}; } catch { return {}; }
+}
+
+function readLayoutPreferences() {
+  try { return JSON.parse(localStorage.getItem('rhinogobius-layout-config')) || {}; } catch { return {}; }
+}
+
+function saveLayoutPreferences() {
+  try { localStorage.setItem('rhinogobius-layout-config', JSON.stringify(layout)); } catch { /* Saving layout is optional. */ }
 }
 
 function savePreferences() {
@@ -58,6 +81,56 @@ function savePreferences() {
 
 function t(key) {
   return messages[language][key] ?? messages.en[key] ?? key;
+}
+
+function applyArtwork(values = {}, shouldSave = true) {
+  const fish = {
+    fishX: Number.isFinite(Number(values.x)) ? Number(values.x) : layout.fishX,
+    fishY: Number.isFinite(Number(values.y)) ? Number(values.y) : layout.fishY,
+    fishScale: Number.isFinite(Number(values.scale)) ? Number(values.scale) : layout.fishScale,
+    fishOpacity: Number.isFinite(Number(values.opacity)) ? Number(values.opacity) : layout.fishOpacity,
+  };
+  Object.entries(fish).forEach(([key, value]) => {
+    const [minimum, maximum] = layoutLimits[key];
+    fish[key] = Math.min(maximum, Math.max(minimum, value));
+  });
+  layout = { ...layout, ...fish };
+  root.style.setProperty('--fish-offset-x', `${layout.fishX}px`);
+  root.style.setProperty('--fish-offset-y', `${layout.fishY}px`);
+  root.style.setProperty('--fish-scale', layout.fishScale / 100);
+  root.style.setProperty('--fish-opacity', layout.fishOpacity / 100);
+  if (shouldSave) {
+    saveLayoutPreferences();
+    savePreferences();
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'rhinogobius-layout:changed', layout: { ...layout } }, window.location.origin);
+    }
+  }
+}
+
+function applyLayout(values = {}, shouldSave = true) {
+  const next = { ...layoutDefaults, ...layout, ...values };
+  Object.entries(layoutLimits).forEach(([key, [minimum, maximum]]) => {
+    const numericValue = Number(next[key]);
+    next[key] = Number.isFinite(numericValue)
+      ? Math.min(maximum, Math.max(minimum, numericValue))
+      : layoutDefaults[key];
+  });
+  layout = next;
+  root.style.setProperty('--layout-shell-width', `${layout.shellWidth}px`);
+  root.style.setProperty('--layout-shell-top', `${layout.shellTop}px`);
+  root.style.setProperty('--layout-hero-height', `${layout.heroHeight}px`);
+  root.style.setProperty('--layout-hero-gap', `${layout.heroGap}px`);
+  root.style.setProperty('--layout-brand-x', `${layout.brandX}px`);
+  root.style.setProperty('--layout-brand-y', `${layout.brandY}px`);
+  root.style.setProperty('--layout-brand-scale', layout.brandScale / 100);
+  root.style.setProperty('--layout-side-x', `${layout.sideX}px`);
+  root.style.setProperty('--layout-side-y', `${layout.sideY}px`);
+  root.style.setProperty('--layout-controls-padding', `${layout.controlsPadding}px`);
+  root.style.setProperty('--layout-table-height', `${layout.tableHeight}vh`);
+  applyArtwork({ x: layout.fishX, y: layout.fishY, scale: layout.fishScale, opacity: layout.fishOpacity }, false);
+  if (shouldSave) saveLayoutPreferences();
+  return { ...layout };
 }
 
 function makeCell(value, className = '') {
@@ -181,9 +254,14 @@ function setPopover(open) {
 
 async function initialize() {
   const preferences = readPreferences();
+  const savedLayout = readLayoutPreferences();
   if (preferences.colour) colourInput.value = preferences.colour;
   if (preferences.opacity) opacityInput.value = preferences.opacity;
   applyTheme(preferences.theme || 'paper', false);
+  applyLayout(Object.keys(savedLayout).length ? savedLayout : {
+    fishX: preferences.artwork?.x, fishY: preferences.artwork?.y,
+    fishScale: preferences.artwork?.scale, fishOpacity: preferences.artwork?.opacity,
+  }, false);
   applyLanguage(preferences.language === 'en' ? 'en' : 'zh');
   const response = await fetch('data/species.json');
   if (!response.ok) throw new Error('Species data could not be loaded.');
@@ -202,11 +280,35 @@ document.querySelectorAll('[data-theme-choice]').forEach((button) => {
 colourInput.addEventListener('input', () => applyTheme('custom'));
 opacityInput.addEventListener('input', () => applyTheme('custom'));
 languageToggle.addEventListener('click', () => applyLanguage(language === 'zh' ? 'en' : 'zh'));
+let artworkDrag;
+heroFish.addEventListener('pointerdown', (event) => {
+  if (!hero.classList.contains('is-artwork-editing')) return;
+  event.preventDefault();
+  heroFish.setPointerCapture(event.pointerId);
+  artworkDrag = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, ...layout };
+});
+heroFish.addEventListener('pointermove', (event) => {
+  if (!artworkDrag || artworkDrag.pointerId !== event.pointerId) return;
+  applyArtwork({ x: artworkDrag.fishX + event.clientX - artworkDrag.startX, y: artworkDrag.fishY + event.clientY - artworkDrag.startY });
+});
+heroFish.addEventListener('pointerup', (event) => {
+  if (artworkDrag?.pointerId === event.pointerId) artworkDrag = undefined;
+});
 document.addEventListener('pointerdown', (event) => {
   if (!event.target.closest('.menu-wrap')) setPopover(false);
 });
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') setPopover(false);
+});
+
+window.addEventListener('message', (event) => {
+  if (event.origin !== window.location.origin) return;
+  if (event.data?.type === 'rhinogobius-layout:apply') {
+    applyLayout(event.data.layout, Boolean(event.data.persist));
+  }
+  if (event.data?.type === 'rhinogobius-layout:editing') {
+    hero.classList.toggle('is-artwork-editing', Boolean(event.data.enabled));
+  }
 });
 
 initialize().catch((error) => {
