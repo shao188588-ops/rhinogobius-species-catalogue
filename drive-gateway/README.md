@@ -49,6 +49,16 @@ npx wrangler kv key put --binding=DOCUMENTS 'document:article-1' '{"fileId":"GOO
 
 The mapping in `documents.example.json` is only a template; it must not receive real IDs before publication. One shared source paper should have one document key and may be assigned to multiple species.
 
+### Inventory an uploaded folder
+
+To list PDFs in a private Drive folder (including nested folders) without exposing the service-account key, run this locally:
+
+```powershell
+node .\scripts\export-drive-inventory.mjs 'C:\path\to\service-account.json' 'DRIVE_FOLDER_ID'
+```
+
+The generated `drive-inventory.private.json` is ignored by Git. It contains document names, relative paths, and Drive file IDs for preparing the private `DOCUMENTS` mappings.
+
 ## Connect the catalogue
 
 After deployment, set the Worker URL in `gateway-config.js`, for example:
