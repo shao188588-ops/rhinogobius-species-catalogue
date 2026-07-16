@@ -65,7 +65,8 @@ async function authorizeAndDownload(request, documentId, document, env) {
     });
     if (!driveResponse.ok || !driveResponse.body) {
       console.error('Google Drive download failed', driveResponse.status);
-      return pageResponse('Download unavailable', 'The private document could not be retrieved.', 502);
+      const reason = await driveFailureReason(driveResponse);
+      return pageResponse('Download unavailable', `Google Drive returned HTTP ${driveResponse.status} (${reason}).`, 502);
     }
     headers.set('Content-Type', driveResponse.headers.get('Content-Type') || 'application/pdf');
     headers.set('Content-Disposition', contentDisposition(document.filename || `${document.label || documentId}.pdf`));
@@ -73,7 +74,7 @@ async function authorizeAndDownload(request, documentId, document, env) {
     return new Response(driveResponse.body, { status: 200, headers });
   } catch (error) {
     console.error('Private download error', error);
-    return pageResponse('Download unavailable', 'The private document could not be retrieved.', 502);
+    return pageResponse('Download unavailable', 'The gateway could not authenticate with Google Drive.', 502);
   }
 }
 
@@ -178,6 +179,16 @@ function readCookie(header, name) {
 function contentDisposition(filename) {
   const safeFallback = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
   return `attachment; filename="${safeFallback}"; filename*=UTF-8''${encodeURIComponent(filename)}`;
+}
+
+async function driveFailureReason(response) {
+  try {
+    const payload = await response.json();
+    const reason = payload?.error?.errors?.[0]?.reason || payload?.error?.status;
+    return typeof reason === 'string' && /^[a-zA-Z0-9._-]{1,80}$/.test(reason) ? reason : 'unknown';
+  } catch {
+    return 'unknown';
+  }
 }
 
 function securityHeaders(contentType) {
