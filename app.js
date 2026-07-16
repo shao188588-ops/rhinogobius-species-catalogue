@@ -2,6 +2,7 @@ const tableBody = document.querySelector('#species-table');
 const searchInput = document.querySelector('#search');
 const referenceFilter = document.querySelector('#reference-filter');
 const resultCount = document.querySelector('#result-count');
+const privateGateway = (window.RHINOGOBIUS_PRIVATE_GATEWAY || '').replace(/\/$/, '');
 
 let species = [];
 
@@ -31,6 +32,14 @@ function referenceCell(item) {
     link.textContent = 'CASlink';
     cell.append(link);
   } else if (item.hasLocalPdf) {
+    if (privateGateway && item.privateDocumentId) {
+      const link = document.createElement('a');
+      link.className = 'cas-link';
+      link.href = `${privateGateway}/download/${encodeURIComponent(item.privateDocumentId)}`;
+      link.textContent = '下载';
+      cell.append(link);
+      return cell;
+    }
     const tag = document.createElement('span');
     tag.className = 'tag local';
     tag.title = '该 PDF 仅保存在本地文献库，未随网页发布。';

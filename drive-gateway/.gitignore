@@ -1,0 +1,5 @@
+# Cloudflare and Google credentials must never enter source control.
+.dev.vars*
+.env*
+service-account*.json
+credentials*.json

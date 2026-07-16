@@ -1,0 +1,17 @@
+name = "rhinogobius-private-library"
+main = "src/index.js"
+compatibility_date = "2026-07-16"
+
+# Create these namespaces first, then replace the placeholder IDs. Do not add
+# secrets to this file or commit local credential files.
+[[kv_namespaces]]
+binding = "DOCUMENTS"
+id = "REPLACE_WITH_DOCUMENTS_NAMESPACE_ID"
+
+[[kv_namespaces]]
+binding = "ACCESS_STATE"
+id = "REPLACE_WITH_ACCESS_STATE_NAMESPACE_ID"
+
+[vars]
+DEVICE_TTL_SECONDS = "7776000" # 90 days
+MAX_ATTEMPTS_PER_HOUR = "8"
