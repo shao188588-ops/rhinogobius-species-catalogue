@@ -92,7 +92,11 @@ button { cursor: pointer; }
 .custom-field input[type="color"] { width: 100%; height: 30px; padding: 2px; border: 1px solid var(--line); border-radius: 7px; background: var(--panel); }
 .opacity-field > span { display: flex; justify-content: space-between; }
 .opacity-field output { color: var(--sea); }
-.opacity-field input[type="range"] { width: 100%; accent-color: var(--sea); }
+.opacity-field input[type="range"] { width: 100%; min-width: 0; height: 18px; min-height: 18px; margin: 0; padding: 0; border: 0; border-radius: 0; appearance: none; background: transparent; }
+.opacity-field input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 99px; background: color-mix(in srgb, var(--sea) 24%, var(--line)); }
+.opacity-field input[type="range"]::-webkit-slider-thumb { width: 14px; height: 14px; margin-top: -5px; border: 2px solid var(--panel-strong); border-radius: 50%; appearance: none; background: var(--sea); box-shadow: 0 1px 4px rgba(20, 48, 64, .25); }
+.opacity-field input[type="range"]::-moz-range-track { height: 4px; border-radius: 99px; background: color-mix(in srgb, var(--sea) 24%, var(--line)); }
+.opacity-field input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border: 2px solid var(--panel-strong); border-radius: 50%; background: var(--sea); box-shadow: 0 1px 4px rgba(20, 48, 64, .25); }
 
 .controls { display: flex; align-items: end; gap: 12px; padding: 16px; border: 1px solid var(--line); background: var(--panel); border-radius: 14px 14px 0 0; backdrop-filter: blur(8px); }
 label { display: grid; gap: 6px; color: var(--muted); font-size: .78rem; font-weight: 700; letter-spacing: .03em; }
