@@ -22,7 +22,7 @@ const messages = {
     authorship: '命名作者', originalCombination: '原始组合', reference: '文献入口',
     download: '下载', localLibrary: '本地图书馆', localTitle: '该 PDF 仅保存在本地图书馆中，尚未配置在线下载。',
     unavailable: '—', loading: '加载中…', failure: '数据加载失败，请通过静态网页服务器打开本站。',
-    results: (count, total) => `显示 ${count} / ${total} 个物种`, switchToEnglish: '切换为 English',
+    results: (count, total) => `显示 ${count} / ${total} 个物种`, switchLanguage: '切换为 English',
     pageTitle: 'Rhinogobius 物种目录',
   },
   en: {
@@ -35,7 +35,7 @@ const messages = {
     reference: 'Reference', download: 'Download', localLibrary: 'Library',
     localTitle: 'This PDF is stored in the local library and has not been configured for online download.',
     unavailable: '—', loading: 'Loading…', failure: 'Species data could not be loaded. Please open this site through a static web server.',
-    results: (count, total) => `Showing ${count} of ${total} species`, switchToEnglish: '切换为中文',
+    results: (count, total) => `Showing ${count} of ${total} species`, switchLanguage: 'Switch to Chinese',
     pageTitle: 'Rhinogobius Species Catalogue',
   },
 };
@@ -134,8 +134,8 @@ function applyLanguage(nextLanguage) {
   document.querySelectorAll('[data-i18n]').forEach((element) => { element.textContent = t(element.dataset.i18n); });
   document.querySelectorAll('[data-i18n-placeholder]').forEach((element) => { element.placeholder = t(element.dataset.i18nPlaceholder); });
   document.querySelectorAll('[data-i18n-aria-label]').forEach((element) => { element.setAttribute('aria-label', t(element.dataset.i18nAriaLabel)); });
-  languageLabel.textContent = language === 'zh' ? 'EN' : '中文';
-  languageToggle.setAttribute('aria-label', t('switchToEnglish'));
+  languageLabel.textContent = language === 'zh' ? '中文' : 'EN';
+  languageToggle.setAttribute('aria-label', t('switchLanguage'));
   if (species.length) render();
   savePreferences();
 }
