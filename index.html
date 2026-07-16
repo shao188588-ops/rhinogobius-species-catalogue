@@ -27,16 +27,7 @@
       <section class="controls" aria-label="Search and filters">
         <label class="search-field">
           <span>检索</span>
-          <input id="search" type="search" placeholder="学名、中文名、模式产地或作者" autocomplete="off" />
-        </label>
-        <label>
-          <span>DNA 描述</span>
-          <select id="dna-filter">
-            <option value="all">全部</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-            <option value="blank">未标注</option>
-          </select>
+          <input id="search" type="search" placeholder="学名、中文名、作者或原始组合" autocomplete="off" />
         </label>
         <label>
           <span>文献状态</span>
@@ -60,10 +51,7 @@
                 <th>Standard Chinese name</th>
                 <th>Authorship</th>
                 <th>Original combination</th>
-                <th>Type locality</th>
-                <th>Described with DNA?</th>
                 <th>Reference</th>
-                <th>Notes</th>
               </tr>
             </thead>
             <tbody id="species-table"></tbody>

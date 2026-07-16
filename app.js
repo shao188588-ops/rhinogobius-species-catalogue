@@ -1,6 +1,5 @@
 const tableBody = document.querySelector('#species-table');
 const searchInput = document.querySelector('#search');
-const dnaFilter = document.querySelector('#dna-filter');
 const referenceFilter = document.querySelector('#reference-filter');
 const resultCount = document.querySelector('#result-count');
 
@@ -49,13 +48,10 @@ function currentItems() {
     const referenceMatches = referenceFilter.value === 'all'
       || (referenceFilter.value === 'local' && item.hasLocalPdf)
       || (referenceFilter.value === 'cas' && Boolean(item.referenceUrl));
-    const dnaMatches = dnaFilter.value === 'all'
-      || (dnaFilter.value === 'blank' && !item.describedWithDna)
-      || item.describedWithDna === dnaFilter.value;
-    const haystack = [item.scientificName, item.chineseName, item.authorship, item.originalCombination, item.typeLocality, item.notes]
+    const haystack = [item.scientificName, item.chineseName, item.authorship, item.originalCombination]
       .join(' ')
       .toLocaleLowerCase();
-    return referenceMatches && dnaMatches && (!query || haystack.includes(query));
+    return referenceMatches && (!query || haystack.includes(query));
   });
 }
 
@@ -70,12 +66,7 @@ function render() {
     row.append(makeCell(item.chineseName, 'chinese'));
     row.append(makeCell(item.authorship));
     row.append(makeCell(item.originalCombination, 'original'));
-    row.append(makeCell(item.typeLocality, 'locality'));
-    const dnaCell = document.createElement('td');
-    dnaCell.append(dnaTag(item.describedWithDna));
-    row.append(dnaCell);
     row.append(referenceCell(item));
-    row.append(makeCell(item.notes));
     fragment.append(row);
   }
   tableBody.append(fragment);
@@ -84,7 +75,6 @@ function render() {
 
 function resetFilters() {
   searchInput.value = '';
-  dnaFilter.value = 'all';
   referenceFilter.value = 'all';
   render();
 }
@@ -98,7 +88,6 @@ async function initialize() {
 }
 
 searchInput.addEventListener('input', render);
-dnaFilter.addEventListener('change', render);
 referenceFilter.addEventListener('change', render);
 document.querySelector('#reset').addEventListener('click', resetFilters);
 
