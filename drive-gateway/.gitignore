@@ -3,3 +3,5 @@
 .env*
 service-account*.json
 credentials*.json
+.wrangler/
+.private-document-map.json

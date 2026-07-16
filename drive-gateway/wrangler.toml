@@ -6,11 +6,11 @@ compatibility_date = "2026-07-16"
 # secrets to this file or commit local credential files.
 [[kv_namespaces]]
 binding = "DOCUMENTS"
-id = "REPLACE_WITH_DOCUMENTS_NAMESPACE_ID"
+id = "3f3ade53ebb04502a73f4796bd947a2c"
 
 [[kv_namespaces]]
 binding = "ACCESS_STATE"
-id = "REPLACE_WITH_ACCESS_STATE_NAMESPACE_ID"
+id = "1bb771b147964f88aaad978cb9ae0711"
 
 [vars]
 DEVICE_TTL_SECONDS = "7776000" # 90 days
