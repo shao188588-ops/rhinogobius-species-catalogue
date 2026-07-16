@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Rhinogobius valid species catalogue with type localities and reference access." />
+    <meta name="description" content="Rhinogobius valid species catalogue with reference access." />
     <title>Rhinogobius Species Catalogue</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -12,53 +12,86 @@
       <header class="hero compact-hero" aria-label="Catalogue summary">
         <div class="catalogue-brand">
           <h1><em>Rhinogobius</em></h1>
-          <p class="catalogue-subtitle">Species Catalogue</p>
+          <p class="catalogue-subtitle" data-i18n="catalogueSubtitle">Species Catalogue</p>
         </div>
-        <div class="headline-stat">
-          <strong id="species-count">—</strong>
-          <span>有效物种</span>
-        </div>
-        <div class="headline-stat updated">
-          <time datetime="2026-07-16">2026-07-16</time>
-          <span>更新时间</span>
+
+        <div class="hero-side">
+          <div class="stats-card" aria-label="Catalogue statistics">
+            <div class="headline-stat">
+              <strong id="species-count">—</strong>
+              <span data-i18n="validSpecies">Valid species</span>
+            </div>
+            <div class="stat-divider" aria-hidden="true"></div>
+            <div class="headline-stat updated">
+              <time datetime="2026-07-16">2026-07-16</time>
+              <span data-i18n="updated">Updated</span>
+            </div>
+          </div>
+
+          <div class="utility-bar" aria-label="Display settings">
+            <div class="menu-wrap">
+              <button id="theme-toggle" class="utility-button" type="button" aria-expanded="false" aria-controls="theme-popover">
+                <span class="button-symbol" aria-hidden="true">◐</span><span data-i18n="theme">Theme</span>
+              </button>
+              <section id="theme-popover" class="theme-popover" hidden aria-label="Theme settings">
+                <p class="popover-title" data-i18n="theme">Theme</p>
+                <div class="theme-presets" role="group" data-i18n-aria-label="presetThemes">
+                  <button type="button" class="theme-choice" data-theme-choice="paper" data-i18n="themePaper">Paper</button>
+                  <button type="button" class="theme-choice" data-theme-choice="mist" data-i18n="themeMist">Mist</button>
+                  <button type="button" class="theme-choice" data-theme-choice="dusk" data-i18n="themeDusk">Dusk</button>
+                  <button type="button" class="theme-choice" data-theme-choice="night" data-i18n="themeNight">Night</button>
+                </div>
+                <label class="custom-field">
+                  <span data-i18n="customColor">Custom colour</span>
+                  <input id="custom-colour" type="color" value="#f7f4ed" />
+                </label>
+                <label class="custom-field opacity-field">
+                  <span><span data-i18n="opacity">Opacity</span> <output id="opacity-value">100%</output></span>
+                  <input id="background-opacity" type="range" min="25" max="100" value="100" step="5" />
+                </label>
+              </section>
+            </div>
+            <button id="language-toggle" class="utility-button language-button" type="button" aria-label="Switch language">
+              <span class="button-symbol" aria-hidden="true">文</span><span id="language-label">中文</span>
+            </button>
+          </div>
         </div>
       </header>
 
       <section class="controls" aria-label="Search and filters">
         <label class="search-field">
-          <span>检索</span>
-          <input id="search" type="search" placeholder="学名、中文名、作者或原始组合" autocomplete="off" />
+          <span data-i18n="search">Search</span>
+          <input id="search" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="Scientific name, Chinese name, authorship or original combination" autocomplete="off" />
         </label>
         <label>
-          <span>文献状态</span>
+          <span data-i18n="referenceStatus">Reference status</span>
           <select id="reference-filter">
-            <option value="all">全部</option>
-            <option value="local">本地文献</option>
+            <option value="all" data-i18n="all">All</option>
+            <option value="local" data-i18n="library">Library</option>
             <option value="cas">CASlink</option>
           </select>
         </label>
-        <button id="reset" type="button">重置筛选</button>
+        <button id="reset" type="button" data-i18n="reset">Reset</button>
       </section>
 
       <section class="catalogue" aria-live="polite">
-        <div class="table-meta"><span id="result-count">载入中…</span></div>
+        <div class="table-meta"><span id="result-count" data-i18n="loading">Loading…</span></div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th>#</th>
-                <th>Scientific name</th>
-                <th>Standard Chinese name</th>
-                <th>Authorship</th>
-                <th>Original combination</th>
-                <th>Reference</th>
+                <th data-i18n="scientificName">Scientific name</th>
+                <th data-i18n="chineseName">Standard Chinese name</th>
+                <th data-i18n="authorship">Authorship</th>
+                <th data-i18n="originalCombination">Original combination</th>
+                <th data-i18n="reference">Reference</th>
               </tr>
             </thead>
             <tbody id="species-table"></tbody>
           </table>
         </div>
       </section>
-
     </main>
     <script src="gateway-config.js"></script>
     <script src="app.js"></script>
