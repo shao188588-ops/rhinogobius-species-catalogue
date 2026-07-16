@@ -6,3 +6,4 @@ credentials*.json
 .wrangler/
 .private-document-map.json
 drive-inventory.private.json
+private-mapping-output/
