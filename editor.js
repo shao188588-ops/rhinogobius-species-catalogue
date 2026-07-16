@@ -25,7 +25,13 @@ function sync({ persist = true } = {}) {
     field.value = layout[field.dataset.layoutControl];
     document.querySelector(`[data-output="${field.dataset.layoutControl}"]`).value = `${field.value}${unitFor(field.dataset.layoutControl)}`;
   });
-  if (persist) localStorage.setItem(storageKey, JSON.stringify(layout));
+  if (persist) {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(layout));
+    } catch {
+      status.textContent = '浏览器未允许保存配置，但当前预览仍可继续调整。';
+    }
+  }
   preview.contentWindow?.postMessage({ type: 'rhinogobius-layout:apply', layout, persist: false }, window.location.origin);
 }
 
