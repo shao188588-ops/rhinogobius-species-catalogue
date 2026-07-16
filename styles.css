@@ -19,11 +19,13 @@ body {
 }
 .shell { width: min(1540px, calc(100% - 40px)); margin: 0 auto; padding: 42px 0 44px; }
 .compact-hero { display: flex; gap: 50px; align-items: baseline; margin-bottom: 24px; }
-.compact-hero h1 { margin: 0 auto 0 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.25rem, 4vw, 3.5rem); letter-spacing: -0.045em; line-height: 1; }
+.catalogue-brand { margin-right: auto; }
+.eyebrow { color: var(--accent); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em; margin: 0 0 8px; }
+.compact-hero h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.25rem, 4vw, 3.5rem); letter-spacing: -0.045em; line-height: 1; }
 .headline-stat { display: flex; align-items: baseline; gap: 10px; }
-.headline-stat strong { color: var(--sea); font-size: clamp(2.4rem, 5vw, 3.8rem); line-height: 1; font-variant-numeric: tabular-nums; }
-.headline-stat time { color: var(--ink); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; font-variant-numeric: tabular-nums; }
-.headline-stat span { color: var(--muted); font-size: .9rem; font-weight: 700; }
+.headline-stat strong { color: var(--sea); font-size: clamp(1.45rem, 2.4vw, 1.9rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.headline-stat time { color: var(--ink); font-size: clamp(1rem, 1.8vw, 1.25rem); font-weight: 800; font-variant-numeric: tabular-nums; }
+.headline-stat span { color: var(--muted); font-size: .76rem; font-weight: 700; }
 .controls { display: flex; align-items: end; gap: 12px; padding: 16px; border: 1px solid var(--line); background: rgba(255,255,255,.74); border-radius: 14px 14px 0 0; }
 label { display: grid; gap: 6px; color: var(--muted); font-size: .78rem; font-weight: 700; letter-spacing: .03em; }
 .search-field { min-width: min(100%, 390px); flex: 1; }
@@ -51,7 +53,7 @@ td.locality { min-width: 260px; max-width: 430px; }
 @media (max-width: 720px) {
   .shell { width: min(100% - 24px, 1540px); padding-top: 36px; }
   .compact-hero { gap: 18px; align-items: start; flex-direction: column; }
-  .compact-hero h1 { margin: 0; }
+  .catalogue-brand { margin-right: 0; }
   .controls { align-items: stretch; flex-direction: column; border-radius: 12px; }
   .search-field { min-width: 0; }
   .catalogue { border-top: 1px solid var(--line); border-radius: 12px; margin-top: 12px; }
