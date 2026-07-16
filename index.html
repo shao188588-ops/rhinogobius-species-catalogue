@@ -9,18 +9,16 @@
   </head>
   <body>
     <main class="shell">
-      <header class="hero">
-        <p class="eyebrow">SPECIES CATALOGUE</p>
-        <h1><em>Rhinogobius</em> Species</h1>
-        <p class="lede">有效物种清单、模式产地与参考文献入口</p>
-        <p class="source">依据 CAS Catalog of Fishes 整理 · 数据更新：2026-07-16</p>
+      <header class="hero compact-hero" aria-label="Catalogue summary">
+        <div class="headline-stat">
+          <strong id="species-count">—</strong>
+          <span>有效物种</span>
+        </div>
+        <div class="headline-stat updated">
+          <time datetime="2026-07-16">2026-07-16</time>
+          <span>更新时间</span>
+        </div>
       </header>
-
-      <section class="summary" aria-label="Catalogue summary">
-        <article><span id="species-count">—</span><small>有效物种</small></article>
-        <article><span id="local-pdf-count">—</span><small>本地文献</small></article>
-        <article><span id="cas-count">—</span><small>CAS 参考入口</small></article>
-      </section>
 
       <section class="controls" aria-label="Search and filters">
         <label class="search-field">
@@ -48,7 +46,7 @@
       </section>
 
       <section class="catalogue" aria-live="polite">
-        <div class="table-meta"><span id="result-count">载入中…</span><span>本地 PDF 不在网页中公开发布</span></div>
+        <div class="table-meta"><span id="result-count">载入中…</span></div>
         <div class="table-wrap">
           <table>
             <thead>
@@ -69,9 +67,6 @@
         </div>
       </section>
 
-      <footer>
-        本站为静态检索界面。分类与文献信息应以原始描述及 CAS 的最新记录为准。
-      </footer>
     </main>
     <script src="app.js"></script>
   </body>

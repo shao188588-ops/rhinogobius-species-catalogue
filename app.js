@@ -94,8 +94,6 @@ async function initialize() {
   if (!response.ok) throw new Error('Species data could not be loaded.');
   species = await response.json();
   document.querySelector('#species-count').textContent = species.length;
-  document.querySelector('#local-pdf-count').textContent = species.filter((item) => item.hasLocalPdf).length;
-  document.querySelector('#cas-count').textContent = species.filter((item) => item.referenceUrl).length;
   render();
 }
 
