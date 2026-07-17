@@ -8,55 +8,34 @@
     <link rel="stylesheet" href="editor.css" />
   </head>
   <body>
-    <aside class="studio-panel" aria-label="Layout controls">
+    <aside class="studio-panel" aria-label="可视化布局工作台">
       <header>
         <p class="eyebrow">RHINOGOBIUS</p>
         <h1>Layout Studio</h1>
-        <p class="intro">拖动滑块即可实时查看。鱼图也可在右侧预览中直接拖动。</p>
+        <p class="intro">在右侧单击标题、鱼图、统计卡片、主题/语言按钮或空白标题区；仅显示所选对象的设置。</p>
       </header>
-
-      <section class="control-group">
-        <h2>页面</h2>
-        <label>内容宽度 <output data-output="shellWidth"></output><input data-layout-control="shellWidth" type="range" min="900" max="1900" step="10" /></label>
-        <label>顶部留白 <output data-output="shellTop"></output><input data-layout-control="shellTop" type="range" min="0" max="120" step="1" /></label>
-        <label>检索区内边距 <output data-output="controlsPadding"></output><input data-layout-control="controlsPadding" type="range" min="0" max="40" step="1" /></label>
-        <label>表格可视高度 <output data-output="tableHeight"></output><input data-layout-control="tableHeight" type="range" min="35" max="90" step="1" /></label>
+      <div class="studio-tools" aria-label="新增元素">
+        <button id="add-operation" type="button">＋ 操作 UI</button>
+        <button id="add-graphic" type="button">＋ 图形/文字</button>
+      </div>
+      <section class="layers-panel" aria-label="元素面板">
+        <h2>元素</h2>
+        <div id="layers" class="layers"></div>
       </section>
-
-      <section class="control-group">
-        <h2>标题区</h2>
-        <label>标题区高度 <output data-output="heroHeight"></output><input data-layout-control="heroHeight" type="range" min="90" max="520" step="1" /></label>
-        <label>标题区下间距 <output data-output="heroGap"></output><input data-layout-control="heroGap" type="range" min="0" max="80" step="1" /></label>
-        <label>标题水平位置 <output data-output="brandX"></output><input data-layout-control="brandX" type="range" min="-500" max="500" step="1" /></label>
-        <label>标题垂直位置 <output data-output="brandY"></output><input data-layout-control="brandY" type="range" min="-240" max="240" step="1" /></label>
-        <label>标题尺寸 <output data-output="brandScale"></output><input data-layout-control="brandScale" type="range" min="55" max="160" step="1" /></label>
+      <section id="inspector" class="inspector" aria-live="polite">
+        <p class="empty-state">尚未选择元素。预览中的表格与搜索栏不会进入排版编辑。</p>
       </section>
-
-      <section class="control-group">
-        <h2>鱼图</h2>
-        <label>水平位置 <output data-output="fishX"></output><input data-layout-control="fishX" type="range" min="-420" max="420" step="1" /></label>
-        <label>垂直位置 <output data-output="fishY"></output><input data-layout-control="fishY" type="range" min="-240" max="240" step="1" /></label>
-        <label>尺寸 <output data-output="fishScale"></output><input data-layout-control="fishScale" type="range" min="40" max="170" step="1" /></label>
-        <label>透明度 <output data-output="fishOpacity"></output><input data-layout-control="fishOpacity" type="range" min="15" max="100" step="1" /></label>
-      </section>
-
-      <section class="control-group">
-        <h2>右侧信息</h2>
-        <label>水平位置 <output data-output="sideX"></output><input data-layout-control="sideX" type="range" min="-500" max="500" step="1" /></label>
-        <label>垂直位置 <output data-output="sideY"></output><input data-layout-control="sideY" type="range" min="-240" max="240" step="1" /></label>
-      </section>
-
-      <div class="studio-actions">
+      <footer class="studio-footer">
+        <button id="deselect" type="button">取消选择</button>
         <button id="reset-layout" type="button">恢复默认</button>
         <button id="copy-layout" type="button">复制配置</button>
-      </div>
-      <p id="studio-status" class="studio-status" role="status">配置仅保存在此浏览器。</p>
+        <p id="studio-status" class="studio-status" role="status">配置仅保存在此浏览器。</p>
+      </footer>
     </aside>
-
     <main class="studio-preview">
       <div class="preview-toolbar"><span>实时预览</span><a href="index.html" target="_blank" rel="noreferrer">打开目录页 ↗</a></div>
       <iframe id="catalogue-preview" title="Rhinogobius catalogue preview" src="index.html"></iframe>
     </main>
-    <script src="editor.js?v=layout-studio-20260716"></script>
+    <script src="editor.js?v=layout-studio-20260717"></script>
   </body>
 </html>
