@@ -9,15 +9,16 @@
   </head>
   <body>
     <main class="shell">
-      <header class="hero compact-hero" aria-label="Catalogue summary">
-        <div class="catalogue-brand">
+      <header class="hero compact-hero" aria-label="Catalogue summary" data-layout-select="hero">
+        <div class="catalogue-brand" data-layout-select="brand">
           <h1><em>Rhinogobius</em></h1>
           <p class="catalogue-subtitle">Species Catalogue</p>
         </div>
-        <img class="hero-fish" src="assets/rhinogobius-watercolor-v3.png" alt="" aria-hidden="true" decoding="async" />
+        <img class="hero-fish" data-layout-select="fish" src="assets/rhinogobius-watercolor-v3.png" alt="" aria-hidden="true" decoding="async" />
+        <div id="custom-elements-layer" aria-live="polite"></div>
 
         <div class="hero-side">
-          <div class="stats-card" aria-label="Catalogue statistics">
+          <div class="stats-card" aria-label="Catalogue statistics" data-layout-select="stats">
             <div class="headline-stat">
               <strong id="species-count">—</strong>
               <span data-i18n="validSpecies">Valid species</span>
@@ -29,7 +30,7 @@
             </div>
           </div>
 
-          <div class="utility-bar" aria-label="Display settings">
+          <div class="utility-bar" aria-label="Display settings" data-layout-select="utilities">
             <div class="menu-wrap">
               <button id="theme-toggle" class="utility-button" type="button" aria-expanded="false" aria-controls="theme-popover">
                 <span class="button-symbol" aria-hidden="true">◐</span><span data-i18n="theme">Theme</span>
