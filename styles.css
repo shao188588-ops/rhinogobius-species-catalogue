@@ -137,7 +137,7 @@ button { cursor: pointer; }
 .opacity-field input[type="range"]::-moz-range-track { height: 4px; border-radius: 99px; background: color-mix(in srgb, var(--sea) 24%, var(--line)); }
 .opacity-field input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border: 2px solid var(--panel-strong); border-radius: 50%; background: var(--sea); box-shadow: 0 1px 4px rgba(20, 48, 64, .25); }
 
-.controls { display: flex; align-items: end; gap: 12px; padding: var(--layout-controls-padding); border: 1px solid var(--line); background: var(--panel); border-radius: 14px 14px 0 0; backdrop-filter: blur(8px); }
+.controls { position: relative; z-index: 0; display: flex; align-items: end; gap: 12px; padding: var(--layout-controls-padding); border: 1px solid var(--line); background: var(--panel); border-radius: 14px 14px 0 0; backdrop-filter: blur(8px); }
 label { display: grid; gap: 6px; color: var(--muted); font-size: .78rem; font-weight: 700; letter-spacing: .03em; }
 .search-field { min-width: min(100%, 390px); flex: 1; }
 input, select, .controls button { min-height: 40px; border: 1px solid color-mix(in srgb, var(--line) 82%, var(--ink)); border-radius: 8px; background: var(--panel-strong); color: var(--ink); }
@@ -145,7 +145,7 @@ input, select { padding: 0 11px; }
 .controls button { padding: 0 16px; color: var(--sea-dark); font-weight: 700; }
 .controls button:hover { background: color-mix(in srgb, var(--sea) 10%, var(--panel-strong)); }
 
-.catalogue { overflow: hidden; border: 1px solid var(--line); border-top: 0; border-radius: 0 0 14px 14px; background: var(--panel-strong); box-shadow: var(--shadow); }
+.catalogue { position: relative; z-index: 0; overflow: hidden; border: 1px solid var(--line); border-top: 0; border-radius: 0 0 14px 14px; background: var(--panel-strong); box-shadow: var(--shadow); }
 .table-meta { padding: 14px 16px; color: var(--muted); border-bottom: 1px solid var(--line); font-size: .82rem; }
 .table-wrap { overflow: auto; max-height: var(--layout-table-height); }
 table { width: 100%; min-width: 1300px; border-collapse: collapse; font-size: .9rem; }
