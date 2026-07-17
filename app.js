@@ -9,6 +9,7 @@ const heroFish = document.querySelector('.hero-fish');
 const customLayer = document.querySelector('#custom-elements-layer');
 const themeToggle = document.querySelector('#theme-toggle');
 const themePopover = document.querySelector('#theme-popover');
+const themeMenu = themeToggle.closest('.menu-wrap');
 const languageToggle = document.querySelector('#language-toggle');
 const languageLabel = document.querySelector('#language-label');
 const colourInput = document.querySelector('#custom-colour');
@@ -61,6 +62,7 @@ let layout = { ...layoutDefaults };
 let layoutEditing = false;
 let layoutSelection = null;
 let dragState = null;
+let themePopoverPortaled = false;
 
 function t(key) { return messages[language][key] ?? messages.en[key] ?? key; }
 function readPreferences() { try { return JSON.parse(localStorage.getItem('rhinogobius-ui-preferences')) || {}; } catch { return {}; } }
@@ -195,6 +197,32 @@ function applyTheme(theme, shouldSave = true) {
   opacityValue.textContent = `${opacityInput.value}%`; document.querySelectorAll('[data-theme-choice]').forEach((button) => button.classList.toggle('is-selected', button.dataset.themeChoice === currentTheme)); if (shouldSave) savePreferences();
 }
 function resetFilters() { searchInput.value = ''; referenceFilter.value = 'all'; render(); }
+function positionThemePopover() {
+  const toggleBox = themeToggle.getBoundingClientRect();
+  themePopover.style.top = `${toggleBox.bottom + 8}px`;
+  themePopover.style.left = `${Math.max(12, toggleBox.right - themePopover.offsetWidth)}px`;
+}
+function setThemePopover(open) {
+  if (open) {
+    if (!themePopoverPortaled) {
+      document.body.append(themePopover);
+      themePopover.classList.add('is-portal');
+      themePopoverPortaled = true;
+    }
+    themePopover.hidden = false;
+    positionThemePopover();
+  } else {
+    themePopover.hidden = true;
+    if (themePopoverPortaled) {
+      themeMenu.append(themePopover);
+      themePopover.classList.remove('is-portal');
+      themePopover.style.removeProperty('top');
+      themePopover.style.removeProperty('left');
+      themePopoverPortaled = false;
+    }
+  }
+  themeToggle.setAttribute('aria-expanded', String(open));
+}
 function runCustomAction(item) {
   if (item.action === 'scroll') document.querySelector('.controls').scrollIntoView({ behavior: 'smooth', block: 'start' });
   if (item.action === 'theme') themeToggle.click();
@@ -211,11 +239,11 @@ async function initialize() {
 }
 
 searchInput.addEventListener('input', render); referenceFilter.addEventListener('change', render); document.querySelector('#reset').addEventListener('click', resetFilters);
-themeToggle.addEventListener('click', () => { themePopover.hidden = !themePopover.hidden; themeToggle.setAttribute('aria-expanded', String(!themePopover.hidden)); });
+themeToggle.addEventListener('click', () => setThemePopover(themePopover.hidden));
 document.querySelectorAll('[data-theme-choice]').forEach((button) => button.addEventListener('click', () => applyTheme(button.dataset.themeChoice)));
 colourInput.addEventListener('input', () => applyTheme('custom')); opacityInput.addEventListener('input', () => applyTheme('custom')); languageToggle.addEventListener('click', () => applyLanguage(language === 'zh' ? 'en' : 'zh'));
 document.addEventListener('pointerdown', (event) => {
-  if (!layoutEditing) { if (!event.target.closest('.menu-wrap')) themePopover.hidden = true; return; }
+  if (!layoutEditing) { if (!event.target.closest('.menu-wrap') && !themePopover.contains(event.target)) setThemePopover(false); return; }
   const custom = event.target.closest('[data-custom-id]'); const selectable = event.target.closest('[data-layout-select]'); const selection = custom ? `custom:${custom.dataset.customId}` : selectable?.dataset.layoutSelect;
   if (!selection) return;
   event.preventDefault(); event.stopPropagation(); setLayoutSelection(selection);
@@ -233,7 +261,7 @@ document.addEventListener('pointermove', (event) => {
 });
 document.addEventListener('pointerup', (event) => { if (dragState?.pointerId === event.pointerId) dragState = null; });
 customLayer.addEventListener('click', (event) => { if (layoutEditing) return; const item = layout.customElements.find((element) => element.id === event.target.closest('[data-custom-id]')?.dataset.customId); if (item?.type === 'operation') runCustomAction(item); });
-window.addEventListener('resize', updateHeroClearance); heroFish.addEventListener('load', updateHeroClearance);
+window.addEventListener('resize', () => { updateHeroClearance(); if (themePopoverPortaled) positionThemePopover(); }); heroFish.addEventListener('load', updateHeroClearance);
 window.addEventListener('message', (event) => {
   if (event.origin !== window.location.origin) return;
   if (event.data?.type === 'rhinogobius-layout:apply') applyLayout(event.data.layout, Boolean(event.data.persist));
