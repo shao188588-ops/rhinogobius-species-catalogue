@@ -87,7 +87,7 @@ button, input, select { font: inherit; }
 button { cursor: pointer; }
 .shell { width: min(var(--layout-shell-width), calc(100% - 40px)); margin: 0 auto; padding: var(--layout-shell-top) 0 44px; }
 
-.compact-hero { position: relative; isolation: isolate; display: flex; justify-content: space-between; gap: 40px; min-height: max(var(--layout-hero-height), var(--layout-hero-clearance)); align-items: flex-start; margin-bottom: var(--layout-hero-gap); overflow: visible; }
+.compact-hero { position: relative; z-index: 20; isolation: isolate; display: flex; justify-content: space-between; gap: 40px; min-height: max(var(--layout-hero-height), var(--layout-hero-clearance)); align-items: flex-start; margin-bottom: var(--layout-hero-gap); overflow: visible; }
 .compact-hero::after { display: none; }
 .catalogue-brand { position: relative; z-index: var(--layout-brand-z); padding-top: 18px; transform: translate(var(--layout-brand-x), var(--layout-brand-y)) scale(var(--layout-brand-scale)); transform-origin: top left; }
 .compact-hero h1 { margin: 0; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: clamp(3.8rem, 7.1vw, 6.8rem); letter-spacing: -.055em; line-height: .88; }
@@ -120,7 +120,7 @@ button { cursor: pointer; }
 .compact-hero.is-layout-editing .custom-element { pointer-events: auto; }
 .compact-hero.is-layout-editing [data-layout-select].layout-selected { outline: 2px solid var(--accent); outline-offset: 5px; }
 
-.theme-popover { position: absolute; z-index: 5; top: calc(100% + 8px); right: 0; width: 252px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-strong); box-shadow: var(--shadow); color: var(--ink); }
+.theme-popover { position: absolute; z-index: 50; top: calc(100% + 8px); right: 0; width: 252px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel-strong); box-shadow: var(--shadow); color: var(--ink); }
 .theme-popover[hidden] { display: none; }
 .popover-title { margin: 0 0 10px; color: var(--muted); font-size: .71rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .theme-presets { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 14px; }
