@@ -39,18 +39,18 @@ const messages = {
 
 const layoutDefaults = {
   shellWidth: 1540, shellTop: 26, heroHeight: 164, heroGap: 14,
-  brandX: 0, brandY: 0, brandScale: 100,
-  statsX: 0, statsY: 0, statsScale: 100,
-  utilitiesX: 0, utilitiesY: 0, utilitiesScale: 100,
-  fishX: 0, fishY: 0, fishScale: 100, fishOpacity: 70,
+  brandX: 0, brandY: 0, brandScale: 100, brandZ: 2,
+  statsX: 0, statsY: 0, statsScale: 100, statsZ: 2,
+  utilitiesX: 0, utilitiesY: 0, utilitiesScale: 100, utilitiesZ: 2,
+  fishX: 0, fishY: 0, fishScale: 100, fishOpacity: 70, fishZ: 1,
   controlsPadding: 16, tableHeight: 70, customElements: [],
 };
 const layoutLimits = {
   shellWidth: [900, 1900], shellTop: [0, 160], heroHeight: [80, 720], heroGap: [0, 120],
-  brandX: [-600, 600], brandY: [-300, 300], brandScale: [45, 180],
-  statsX: [-600, 600], statsY: [-300, 300], statsScale: [45, 180],
-  utilitiesX: [-600, 600], utilitiesY: [-300, 300], utilitiesScale: [45, 180],
-  fishX: [-700, 700], fishY: [-360, 500], fishScale: [25, 220], fishOpacity: [5, 100],
+  brandX: [-600, 600], brandY: [-300, 300], brandScale: [45, 180], brandZ: [-20, 40],
+  statsX: [-600, 600], statsY: [-300, 300], statsScale: [45, 180], statsZ: [-20, 40],
+  utilitiesX: [-600, 600], utilitiesY: [-300, 300], utilitiesScale: [45, 180], utilitiesZ: [-20, 40],
+  fishX: [-700, 700], fishY: [-360, 500], fishScale: [25, 220], fishOpacity: [5, 100], fishZ: [-20, 40],
   controlsPadding: [0, 56], tableHeight: [35, 90],
 };
 
@@ -78,13 +78,15 @@ function normaliseCustom(item) {
     width: Math.max(20, Number(item.width) || 160), height: Math.max(20, Number(item.height) || 42),
     fontSize: Math.max(8, Number(item.fontSize) || 16), colour: item.colour || '#0c6570', textColour: item.textColour || '#ffffff',
     opacity: Number.isFinite(Number(item.opacity)) ? Math.min(100, Math.max(0, Number(item.opacity))) : 100,
-    radius: Math.max(0, Number(item.radius) || 10), hidden: Boolean(item.hidden),
+    radius: Math.max(0, Number(item.radius) || 10),
+    z: Number.isFinite(Number(item.z)) ? Math.min(40, Math.max(-20, Number(item.z))) : 3,
+    hidden: Boolean(item.hidden),
   };
 }
 
 function renderCustomElements() {
   customLayer.replaceChildren();
-  layout.customElements.forEach((item, index) => {
+  layout.customElements.forEach((item) => {
     const element = document.createElement(item.type === 'operation' ? 'button' : 'div');
     element.className = `custom-element ${item.type} ${item.shape}`;
     element.dataset.layoutSelect = 'custom';
@@ -98,7 +100,7 @@ function renderCustomElements() {
     element.style.setProperty('--custom-text-colour', item.textColour);
     element.style.setProperty('--custom-opacity', item.opacity / 100);
     element.style.setProperty('--custom-radius', `${item.radius}px`);
-    element.style.zIndex = String(3 + index);
+    element.style.zIndex = String(item.z);
     if (item.hidden) element.hidden = true;
     if (item.type !== 'shape') element.textContent = item.text;
     if (item.type === 'operation') element.type = 'button';
@@ -128,10 +130,10 @@ function applyLayout(values = {}, shouldSave = true) {
   const cssValues = {
     '--layout-shell-width': `${layout.shellWidth}px`, '--layout-shell-top': `${layout.shellTop}px`, '--layout-hero-height': `${layout.heroHeight}px`,
     '--layout-hero-gap': `${layout.heroGap}px`, '--layout-brand-x': `${layout.brandX}px`, '--layout-brand-y': `${layout.brandY}px`,
-    '--layout-brand-scale': layout.brandScale / 100, '--layout-stats-x': `${layout.statsX}px`, '--layout-stats-y': `${layout.statsY}px`,
-    '--layout-stats-scale': layout.statsScale / 100, '--layout-utilities-x': `${layout.utilitiesX}px`, '--layout-utilities-y': `${layout.utilitiesY}px`,
-    '--layout-utilities-scale': layout.utilitiesScale / 100, '--fish-offset-x': `${layout.fishX}px`, '--fish-offset-y': `${layout.fishY}px`,
-    '--fish-scale': layout.fishScale / 100, '--fish-opacity': layout.fishOpacity / 100,
+    '--layout-brand-scale': layout.brandScale / 100, '--layout-brand-z': layout.brandZ, '--layout-stats-x': `${layout.statsX}px`, '--layout-stats-y': `${layout.statsY}px`,
+    '--layout-stats-scale': layout.statsScale / 100, '--layout-stats-z': layout.statsZ, '--layout-utilities-x': `${layout.utilitiesX}px`, '--layout-utilities-y': `${layout.utilitiesY}px`,
+    '--layout-utilities-scale': layout.utilitiesScale / 100, '--layout-utilities-z': layout.utilitiesZ, '--fish-offset-x': `${layout.fishX}px`, '--fish-offset-y': `${layout.fishY}px`,
+    '--fish-scale': layout.fishScale / 100, '--fish-opacity': layout.fishOpacity / 100, '--fish-z': layout.fishZ,
     '--layout-controls-padding': `${layout.controlsPadding}px`, '--layout-table-height': `${layout.tableHeight}vh`,
   };
   Object.entries(cssValues).forEach(([key, value]) => root.style.setProperty(key, value));
