@@ -24,7 +24,7 @@ const messages = {
     library: '本地图书馆', reset: '重置筛选', scientificName: '学名', chineseName: '中文正式名', authorship: '命名作者',
     originalCombination: '原始组合', reference: '文献入口', download: '下载', localLibrary: '本地图书馆', unavailable: '—',
     loading: '加载中…', failure: '数据加载失败，请通过静态网页服务打开本站。', results: (count, total) => `显示 ${count} / ${total} 个物种`,
-    switchLanguage: '切换至 English', pageTitle: 'Rhinogobius 物种目录',
+    switchLanguage: '切换至 English', pageTitle: 'Rhinogobius 物种目录', mapEntry: '模式产地地图', mapEntryCaption: '查看物种定位',
   },
   en: {
     catalogueSubtitle: 'Species Catalogue', validSpecies: 'Valid species', updated: 'Updated', theme: 'Theme', presetThemes: 'Preset themes',
@@ -34,7 +34,7 @@ const messages = {
     authorship: 'Authorship', originalCombination: 'Original combination', reference: 'Reference', download: 'Download',
     localLibrary: 'Library', unavailable: '—', loading: 'Loading…', failure: 'Species data could not be loaded.',
     results: (count, total) => `Showing ${count} of ${total} species`, switchLanguage: 'Switch to Chinese',
-    pageTitle: 'Rhinogobius Species Catalogue',
+    pageTitle: 'Rhinogobius Species Catalogue', mapEntry: 'Type Locality Map', mapEntryCaption: 'Explore species locations',
   },
 };
 
@@ -43,6 +43,7 @@ const layoutDefaults = {
   brandX: 0, brandY: 0, brandScale: 100, brandZ: 2,
   statsX: 0, statsY: 0, statsScale: 100, statsZ: 2,
   utilitiesX: 0, utilitiesY: 0, utilitiesScale: 100, utilitiesZ: 2,
+  mapEntryX: 0, mapEntryY: 0, mapEntryScale: 100, mapEntryZ: 2,
   fishX: 0, fishY: 0, fishScale: 100, fishOpacity: 70, fishZ: 1,
   controlsPadding: 16, tableHeight: 70, customElements: [],
 };
@@ -51,6 +52,7 @@ const layoutLimits = {
   brandX: [-600, 600], brandY: [-300, 300], brandScale: [45, 180], brandZ: [-20, 40],
   statsX: [-600, 600], statsY: [-300, 300], statsScale: [45, 180], statsZ: [-20, 40],
   utilitiesX: [-600, 600], utilitiesY: [-300, 300], utilitiesScale: [45, 180], utilitiesZ: [-20, 40],
+  mapEntryX: [-600, 600], mapEntryY: [-300, 500], mapEntryScale: [45, 180], mapEntryZ: [-20, 40],
   fishX: [-700, 700], fishY: [-360, 500], fishScale: [25, 220], fishOpacity: [5, 100], fishZ: [-20, 40],
   controlsPadding: [0, 56], tableHeight: [35, 90],
 };
@@ -135,6 +137,7 @@ function applyLayout(values = {}, shouldSave = true) {
     '--layout-brand-scale': layout.brandScale / 100, '--layout-brand-z': layout.brandZ, '--layout-stats-x': `${layout.statsX}px`, '--layout-stats-y': `${layout.statsY}px`,
     '--layout-stats-scale': layout.statsScale / 100, '--layout-stats-z': layout.statsZ, '--layout-utilities-x': `${layout.utilitiesX}px`, '--layout-utilities-y': `${layout.utilitiesY}px`,
     '--layout-utilities-scale': layout.utilitiesScale / 100, '--layout-utilities-z': layout.utilitiesZ, '--fish-offset-x': `${layout.fishX}px`, '--fish-offset-y': `${layout.fishY}px`,
+    '--layout-map-entry-x': `${layout.mapEntryX}px`, '--layout-map-entry-y': `${layout.mapEntryY}px`, '--layout-map-entry-scale': layout.mapEntryScale / 100, '--layout-map-entry-z': layout.mapEntryZ,
     '--fish-scale': layout.fishScale / 100, '--fish-opacity': layout.fishOpacity / 100, '--fish-z': layout.fishZ,
     '--layout-controls-padding': `${layout.controlsPadding}px`, '--layout-table-height': `${layout.tableHeight}vh`,
   };

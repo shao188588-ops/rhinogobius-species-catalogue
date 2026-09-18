@@ -2,6 +2,7 @@ const defaults = {
   shellWidth: 1540, shellTop: 26, heroHeight: 164, heroGap: 14,
   brandX: 0, brandY: 0, brandScale: 100, brandZ: 2, statsX: 0, statsY: 0, statsScale: 100, statsZ: 2,
   utilitiesX: 0, utilitiesY: 0, utilitiesScale: 100, utilitiesZ: 2, fishX: 0, fishY: 0, fishScale: 100, fishOpacity: 70, fishZ: 1,
+  mapEntryX: 0, mapEntryY: 0, mapEntryScale: 100, mapEntryZ: 2,
   controlsPadding: 16, tableHeight: 70, customElements: [],
 };
 const storageKey = 'rhinogobius-layout-config';
@@ -18,6 +19,7 @@ const groups = {
   fish: { title: '鱼图', fields: [['fishX', '水平位置', -700, 700], ['fishY', '垂直位置', -360, 500], ['fishScale', '尺寸', 25, 220, 1, '%'], ['fishOpacity', '透明度', 5, 100, 1, '%'], ['fishZ', '图层顺序', -20, 40]] },
   stats: { title: '有效物种与更新时间', fields: [['statsX', '水平位置', -600, 600], ['statsY', '垂直位置', -300, 300], ['statsScale', '尺寸', 45, 180, 1, '%'], ['statsZ', '图层顺序', -20, 40]] },
   utilities: { title: '主题与语言按钮', fields: [['utilitiesX', '水平位置', -600, 600], ['utilitiesY', '垂直位置', -300, 300], ['utilitiesScale', '尺寸', 45, 180, 1, '%'], ['utilitiesZ', '图层顺序', -20, 40]] },
+  mapEntry: { title: '模式产地地图入口', fields: [['mapEntryX', '水平位置', -600, 600], ['mapEntryY', '垂直位置', -300, 500], ['mapEntryScale', '尺寸', 45, 180, 1, '%'], ['mapEntryZ', '图层顺序', -20, 40]] },
 };
 
 function readLayout() { try { return { ...defaults, ...(JSON.parse(localStorage.getItem(storageKey)) || {}), customElements: (JSON.parse(localStorage.getItem(storageKey)) || {}).customElements || [] }; } catch { return { ...defaults }; } }
@@ -56,7 +58,7 @@ function updateInspectorValues() {
   if (custom) inspector.querySelectorAll('[data-custom-key]').forEach((input) => { if (document.activeElement !== input) input.value = custom[input.dataset.customKey] ?? ''; const output = inspector.querySelector(`[data-output="${input.dataset.customKey}"]`); if (output) output.value = `${input.value}${input.dataset.unit || 'px'}`; });
 }
 function renderLayers() {
-  const builtins = [['hero', '▦ 标题区'], ['brand', `T 主标题 · z ${layout.brandZ}`], ['fish', `◒ 鱼图 · z ${layout.fishZ}`], ['stats', `▤ 统计卡片 · z ${layout.statsZ}`], ['utilities', `◉ 主题/语言 · z ${layout.utilitiesZ}`]];
+  const builtins = [['hero', '▦ 标题区'], ['brand', `T 主标题 · z ${layout.brandZ}`], ['fish', `◒ 鱼图 · z ${layout.fishZ}`], ['stats', `▤ 统计卡片 · z ${layout.statsZ}`], ['utilities', `◉ 主题/语言 · z ${layout.utilitiesZ}`], ['mapEntry', `⌖ 地图入口 · z ${layout.mapEntryZ}`]];
   const custom = layout.customElements.map((item) => [`custom:${item.id}`, item.type === 'operation' ? `▣ ${item.text || '操作 UI'} · z ${item.z}` : `◇ ${item.text || '图形/文字元素'} · z ${item.z}`, item]);
   layersPanel.innerHTML = [...builtins, ...custom].map(([id, label, item]) => `<div class="layer-row"><button class="layer-item${selection === id ? ' is-selected' : ''}" type="button" data-layer-select="${id}">${label}</button>${item ? `<button class="layer-visibility" type="button" data-layer-visibility="${item.id}" title="切换显示">${item.hidden ? '○' : '◉'}</button>` : ''}</div>`).join('');
 }
