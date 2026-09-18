@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rhinogobius 模式产地地图</title>
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="map-app">
+      <aside class="sidebar" aria-label="物种筛选与列表">
+        <header class="sidebar__header">
+          <p class="eyebrow">Rhinogobius</p>
+          <h1 data-i18n="pageTitle">模式产地地图</h1>
+        </header>
+
+        <section class="filters" aria-label="筛选条件">
+          <label class="search-field">
+            <span data-i18n="searchLabel">检索物种或产地</span>
+            <input id="search-input" type="search" placeholder="学名、中文名或模式产地" data-i18n-placeholder="searchPlaceholder" autocomplete="off">
+          </label>
+          <div class="filter-grid">
+            <label>
+              <span data-i18n="statusLabel">定位状态</span>
+              <select id="status-filter">
+                <option value="all" data-i18n="all">全部</option>
+                <option value="exact" data-i18n="exactPosition">原文精确坐标</option>
+                <option value="named" data-i18n="approximatePosition">大致位置</option>
+                <option value="inferred" data-i18n="vagueLocality">产地模糊</option>
+              </select>
+            </label>
+            <label>
+              <span data-i18n="regionLabel">国家／地区</span>
+              <select id="region-filter">
+                <option value="all" data-i18n="all">全部</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <div class="list-heading">
+          <span id="result-count">—</span>
+          <button id="clear-filters" type="button" data-i18n="reset">重置</button>
+        </div>
+        <ol id="species-list" class="species-list" aria-live="polite"></ol>
+      </aside>
+
+      <section class="map-stage" aria-label="互动地图">
+        <div id="map"></div>
+        <div class="map-toolbar">
+          <label class="basemap-control">
+            <span data-i18n="basemap">底图</span>
+            <select id="basemap-select" aria-label="选择底图" data-i18n-aria-label="chooseBasemap">
+              <option value="esriTopo">Esri 地形图</option>
+            </select>
+          </label>
+          <label class="species-label-control" title="放大地图或缩小筛选范围后显示物种名称" data-i18n-title="speciesLabelsTitle">
+            <input id="species-labels" type="checkbox" checked>
+            <span data-i18n="speciesLabels">物种标签</span>
+          </label>
+          <button id="fit-markers" type="button" title="显示全部精确点位" data-i18n="showAllPoints" data-i18n-title="showAllPointsTitle">显示全部点位</button>
+          <a id="basemap-settings" class="basemap-settings-link" href="?settings=1" data-i18n="basemapSettings">自定义底图</a>
+          <label class="language-control">
+            <span data-i18n="language">语言</span>
+            <select id="language-select" aria-label="切换界面语言" data-i18n-aria-label="languageControl">
+              <option value="zh">中文</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+        </div>
+        <dialog id="basemap-settings-dialog" class="basemap-dialog">
+          <form id="basemap-settings-form" class="basemap-dialog__form">
+            <header class="basemap-dialog__header">
+              <h2 data-i18n="basemapSettingsTitle">自定义底图</h2>
+              <button id="basemap-settings-close" class="basemap-dialog__close" type="button" aria-label="关闭" data-i18n-aria-label="close">×</button>
+            </header>
+            <p class="basemap-dialog__note" data-i18n="basemapSettingsNote">设置仅保存在当前浏览器。瓦片地址支持 {s}、{z}、{x}、{y} 和 {apiKey}。</p>
+            <div class="basemap-dialog__grid">
+              <label>
+                <span data-i18n="customNameZh">中文名称</span>
+                <input id="custom-basemap-name-zh" type="text" autocomplete="off">
+              </label>
+              <label>
+                <span data-i18n="customNameEn">英文名称</span>
+                <input id="custom-basemap-name-en" type="text" autocomplete="off">
+              </label>
+              <label class="basemap-dialog__wide">
+                <span data-i18n="customTileUrl">底图瓦片地址</span>
+                <input id="custom-basemap-url" type="text" required spellcheck="false" placeholder="https://.../{z}/{x}/{y}.png">
+              </label>
+              <label class="basemap-dialog__wide">
+                <span data-i18n="customLabelUrl">注记层地址（可选）</span>
+                <input id="custom-basemap-label-url" type="text" spellcheck="false" placeholder="https://.../{z}/{x}/{y}.png">
+              </label>
+              <label class="basemap-dialog__wide">
+                <span data-i18n="customApiKey">API Key（可选）</span>
+                <input id="custom-basemap-api-key" type="password" autocomplete="off" spellcheck="false">
+              </label>
+              <label class="basemap-dialog__wide">
+                <span data-i18n="customAttribution">地图署名</span>
+                <input id="custom-basemap-attribution" type="text" autocomplete="off">
+              </label>
+              <label>
+                <span data-i18n="customMaxZoom">最大缩放级别</span>
+                <input id="custom-basemap-max-zoom" type="number" min="1" max="24" value="19">
+              </label>
+              <label>
+                <span data-i18n="customSubdomains">子域名</span>
+                <input id="custom-basemap-subdomains" type="text" value="abc" spellcheck="false">
+              </label>
+            </div>
+            <footer class="basemap-dialog__actions">
+              <button id="basemap-settings-reset" class="secondary" type="button" data-i18n="resetCustomBasemap">恢复默认</button>
+              <button id="basemap-settings-cancel" class="secondary" type="button" data-i18n="cancel">取消</button>
+              <button class="primary" type="submit" data-i18n="saveAndApply">保存并应用</button>
+            </footer>
+          </form>
+        </dialog>
+        <div class="legend" aria-label="图例">
+          <span><i class="legend__triangle"></i><b data-i18n="legendExact">精确位置</b></span>
+          <span><i class="legend__triangle legend__triangle--named"></i><b data-i18n="legendApproximate">大致位置</b></span>
+          <span><i class="legend__dot legend__dot--inferred"></i><b data-i18n="legendVague">产地模糊</b></span>
+        </div>
+        <div id="selection-card" class="selection-card" hidden></div>
+        <div id="map-error" class="map-error" hidden></div>
+      </section>
+    </main>
+
+    <script src="vendor/leaflet/leaflet.js"></script>
+    <script src="map-config.js"></script>
+    <script src="map-data.js"></script>
+    <script src="georeferenced-points.js"></script>
+    <script src="inferred-points.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
